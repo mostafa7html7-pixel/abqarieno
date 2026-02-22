@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحميل التقييمات - الدكتور</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* تنسيقات خاصة بملفات التحميل */
+        .file-card {
+            text-align: center;
+            padding: 30px 20px;
+            transition: transform 0.3s ease;
+        }
+        .file-card:hover {
+            transform: translateY(-10px);
+        }
+        .file-icon {
+            font-size: 3.5rem;
+            color: #e74c3c; /* لون الـ PDF */
+            margin-bottom: 15px;
+        }
+        .file-info {
+            margin: 15px 0;
+            font-size: 0.85rem;
+            color: #666;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #2980b9;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-download:hover {
+            background: #3498db;
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+        }
+        @media (max-width: 992px) {
+            .grid-container.grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .grid-container.grid-3 {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            .page-header .main-title {
+                font-size: 2.2rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <div class="logo-text"><span>الدكتور</span><small>BIOLOGY MASTER</small></div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="library.html">الكتب</a></li>
+            <li><a href="videos.html">الفيديوهات</a></li>
+            <li><a href="schedule.html">الجدول</a></li>
+            <li><a href="reviews.html" class="active">التقييمات</a></li> 
+            <li><a href="contact.html">تواصل معنا</a></li>
+        </ul>
+        <a href="scientific-books.html" class="btn-nav-special">الكتب العلمية النادرة</a>
+        <div class="menu-btn"><i class="fa-solid fa-bars"></i></div>
+    </nav>
+
+    <div class="page-header">
+        <p class="subtitle">DOWNLOAD ASSESSMENTS</p>
+        <h2 class="main-title">بنك التقييمات الأسبوعية</h2>
+    </div>
+
+    <section class="container">
+        <div class="grid-container grid-3">
+            <div class="review-card file-card">
+                <h4>تقييم الفصل الأول</h4>
+                <a href="files/assessment-1.pdf" download class="btn-download">
+                    <i class="fa-solid fa-cloud-arrow-down"></i> تحميل التقييم
+                </a>
+            </div>
+
+            <div class="review-card file-card">
+                <h4>تقييم التنسيق الهرموني</h4>
+                <a href="files/assessment-2.pdf" download class="btn-download">
+                    <i class="fa-solid fa-cloud-arrow-down"></i> تحميل التقييم
+                </a>
+            </div>
+
+            <div class="review-card file-card">
+                <h4>نموذج إجابة التقييم الشامل</h4>
+                <a href="files/answers-1.docx" download class="btn-download" style="background:#27ae60">
+                    <i class="fa-solid fa-cloud-arrow-down"></i> تحميل النموذج
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p style="text-align: center;">جميع الحقوق محفوظة © 2026 | تم التطوير بواسطة فريق عبقرينو & كيمو <i class="fa-solid fa-heart"></i></p>
+    </footer>
+
+    <script>
+        const menuBtn = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBtn.innerHTML = navLinks.classList.contains('active') ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+        });
+    </script>
+</body>
+</html>

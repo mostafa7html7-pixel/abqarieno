@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفيديوهات - الدكتور</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @media (max-width: 992px) {
+            .grid-container.grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .page-header .main-title {
+                font-size: 2.2rem !important;
+            }
+            .page-header p:not(.subtitle) {
+                width: 90%;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <div class="logo-text"><span>الدكتور</span><small>BIOLOGY MASTER</small></div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="library.html">الكتب</a></li>
+            <li><a href="videos.html" class="active">الفيديوهات</a></li> <li><a href="reviews.html">التقييمات</a></li>
+            <li><a href="schedule.html">الجدول</a></li>
+            <li><a href="contact.html">تواصل معنا</a></li>
+            <li><a href="scientific-books.html">الكتب النادرة</a></li>
+        </ul>
+        <a href="scientific-books.html" class="btn-nav-special">الكتب العلمية النادرة</a>
+        <div class="menu-btn"><i class="fa-solid fa-bars"></i></div>
+    </nav>
+
+    <div class="page-header">
+        <p class="subtitle">LECTURES</p>
+        <h2 class="main-title">معمل <span class="neon-green-text">الفيديو</span></h2>
+        <p style="color:#888">شاهد دروسك بأعلى جودة ممكنة</p>
+    </div>
+
+    <section class="container">
+        <div class="grid-container grid-2">
+            <div class="video-card">
+                <div class="vid-thumb">
+                    <!-- ضع رابط الفيديو هنا (YouTube Embed) -->
+                    <iframe src="https://youtu.be/v0FAN5ieUPc?si=WchvP_Ua2N0HCSbs" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="vid-info">
+                    <span class="vid-cat">الدرس الأول</span>
+                    <h3>
+قصة اكتشاف الحمض النووي | الدحيح</h3>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="vid-thumb">
+                    <!-- ضع رابط الفيديو هنا -->
+                    <iframe src="https://youtu.be/qtxquLkeNak?si=weaf1TbLtvuYSXVy" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="vid-info">
+                    <span class="vid-cat">الوراثة</span>
+                    <h3> هل فعلًا الدم عمره ما يبقى مياه؟ | الدحيح</h3>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="vid-thumb">
+                    <!-- ضع رابط الفيديو هنا -->
+                    <iframe src="https://youtu.be/DVryY-MqMSM?si=Ov_OK1CyH_QIPAPS" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="vid-info">
+                    <span class="vid-cat">الأنزيمات</span>
+                    <h3> الدحيح | علم الوراثة</h3>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="vid-thumb">
+                    <!-- ضع رابط الفيديو هنا -->
+                    <iframe src="https://youtu.be/RcBR7YDFkaA?si=QMBoYpXRVOnLq4RP" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="vid-info">
+                    <span class="vid-cat">الفسيولوجيا</span>
+                    <h3>تاريخ التشريح | الدحيح</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p style="text-align: center;">جميع الحقوق محفوظة © 2026 | تم التطوير بواسطة فريق عبقرينو & كيمو <i class="fa-solid fa-heart"></i></p>
+    </footer>
+
+    <script>
+        const menuBtn = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBtn.innerHTML = navLinks.classList.contains('active') ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+        });
+
+        // تشغيل الفيديو تلقائياً عند تمرير الماوس (صامت)
+        const videoCards = document.querySelectorAll('.video-card');
+
+        videoCards.forEach(card => {
+            const iframe = card.querySelector('iframe');
+            if (!iframe) return;
+
+            const originalSrc = iframe.getAttribute('src');
+            const separator = originalSrc.includes('?') ? '&' : '?';
+            const autoplaySrc = `${originalSrc}${separator}autoplay=1&mute=1`;
+
+            card.addEventListener('mouseenter', () => {
+                iframe.setAttribute('src', autoplaySrc);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                iframe.setAttribute('src', originalSrc);
+            });
+        });
+    </script>
+</body>
+</html>
