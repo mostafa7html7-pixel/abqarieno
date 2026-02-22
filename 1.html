@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة الفلسفة | الكتاب المغلق</title>
+    <style>
+        :root {
+            --bg-black: #0a0a0c;
+            --surface-black: rgba(20, 20, 25, 0.6);
+            --neon-red: #e63946;
+            --neon-orange: #f77f00;
+            --text-primary: #f1faee;
+            --text-secondary: #a8a8b3;
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: radial-gradient(circle at 50% 0%, rgba(230, 57, 70, 0.1) 0%, transparent 50%),
+                              radial-gradient(circle at 100% 100%, rgba(247, 127, 0, 0.05) 0%, transparent 50%);
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 40px auto;
+            background: var(--surface-black);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        header { text-align: center; margin-bottom: 10px; }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--neon-red), var(--neon-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        /* حاوية الغلاف (الكتاب المغلق) */
+        #book-cover {
+            width: 100%;
+            height: 60vh;
+            border-radius: 16px;
+            /* هنا تم وضع مسار الصورة 1 كما طلبت */
+            background-image: url('1'); 
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            transition: all 0.8s ease-in-out;
+            overflow: hidden;
+        }
+
+        /* الطبقة الزجاجية فوق الغلاف */
+        .cover-overlay {
+            background: rgba(10, 10, 12, 0.75);
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .cover-overlay:hover {
+            transform: scale(1.02);
+        }
+
+        .cover-overlay h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            text-shadow: 0 2px 10px rgba(230, 57, 70, 0.5);
+        }
+
+        /* أزرار التحكم */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            border-color: var(--neon-red);
+            background: rgba(230, 57, 70, 0.05);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--neon-red), var(--neon-orange));
+            border: none;
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+            padding: 15px 40px;
+            font-size: 1.2rem;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #ff4d5a, #ff9500);
+            box-shadow: 0 8px 25px rgba(247, 127, 0, 0.4);
+        }
+
+        /* حاوية الكتاب المفتوح (Iframe) - مخفية في البداية */
+        #pdf-viewer-container {
+            display: none; /* الكتاب مغلق في البداية */
+            width: 100%;
+            height: 75vh;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: #000;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* شريط التمرير */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-black); }
+        ::-webkit-scrollbar-thumb { background: var(--neon-red); border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <header>
+            <h1>الفلسفة والحياة</h1>
+            <p style="color: var(--text-secondary);">رحلة في أعماق الفكر الإنساني</p>
+        </header>
+
+        <div id="book-cover">
+            <div class="cover-overlay">
+                <h2>كتاب الامتحان - أولى ثانوي</h2>
+                <button onclick="openBook()" class="btn btn-primary">افتح الكتاب لتبدأ القراءة</button>
+            </div>
+        </div>
+
+        <div class="controls" id="action-controls" style="display: none;">
+            <button onclick="toggleFullScreen()" class="btn">ملء الشاشة للتأمل</button>
+            <a href="https://drive.google.com/uc?export=download&id=1L81kbqenx9wEZU2b-NMDOQy4XfRO_C93" class="btn">حفظ المعرفة (تحميل)</a>
+            <button onclick="closeBook()" class="btn" style="border-color: var(--text-secondary);">إغلاق الكتاب</button>
+        </div>
+
+        <div id="pdf-viewer-container">
+            <iframe id="book-frame" src="about:blank" allow="fullscreen"></iframe>
+        </div>
+
+    </div>
+
+    <script>
+        // دالة فتح الكتاب
+        function openBook() {
+            const cover = document.getElementById('book-cover');
+            const viewer = document.getElementById('pdf-viewer-container');
+            const controls = document.getElementById('action-controls');
+            const iframe = document.getElementById('book-frame');
+
+            // إخفاء الغلاف بتأثير ناعم
+            cover.style.opacity = '0';
+            cover.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                cover.style.display = 'none'; // إخفاء الغلاف تماماً
+                
+                // إظهار الكتاب وأزرار التحكم
+                viewer.style.display = 'block';
+                controls.style.display = 'flex';
+                
+                // تحميل رابط الكتاب فقط عند الفتح (لتوفير سرعة الصفحة في البداية)
+                if(iframe.src === "about:blank" || iframe.src.includes("about:blank")) {
+                    iframe.src = "https://drive.google.com/file/d/1L81kbqenx9wEZU2b-NMDOQy4XfRO_C93/preview";
+                }
+
+                // تطبيق تأثير الظهور (Fade in)
+                setTimeout(() => {
+                    viewer.style.opacity = '1';
+                    viewer.style.transform = 'translateY(0)';
+                }, 50);
+
+            }, 500); // الانتظار نصف ثانية حتى تنتهي حركة الاختفاء
+        }
+
+        // دالة إغلاق الكتاب والعودة للغلاف
+        function closeBook() {
+            const cover = document.getElementById('book-cover');
+            const viewer = document.getElementById('pdf-viewer-container');
+            const controls = document.getElementById('action-controls');
+
+            viewer.style.opacity = '0';
+            viewer.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                viewer.style.display = 'none';
+                controls.style.display = 'none';
+                
+                cover.style.display = 'flex';
+                setTimeout(() => {
+                    cover.style.opacity = '1';
+                    cover.style.transform = 'scale(1)';
+                }, 50);
+            }, 500);
+        }
+
+        // وظيفة ملء الشاشة
+        function toggleFullScreen() {
+            let elem = document.getElementById("pdf-viewer-container");
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    console.log(`خطأ: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+
+</body>
+</html>

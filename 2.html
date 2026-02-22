@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معرض الفلاسفة | رؤية 2026</title>
+    <style>
+        /* المتغيرات والألوان النيونية */
+        :root {
+            --bg-dark: #08080a;
+            --primary-glow: #e63946; /* أحمر نيون */
+            --secondary-glow: #f77f00; /* برتقالي نيون */
+            --text-light: #f1faee;
+            --text-muted: #a8a8b3;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --overlay-bg: rgba(0, 0, 0, 0.9);
+        }
+
+        /* إعادة ضبط أساسية */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* خلفية متدرجة بسيطة لعمق */
+            background-image: radial-gradient(circle at 50% 0%, rgba(230, 57, 70, 0.05) 0%, transparent 40%),
+                              radial-gradient(circle at 100% 100%, rgba(247, 127, 0, 0.03) 0%, transparent 40%);
+            overflow-x: hidden;
+            padding-bottom: 50px; /* مسافة للأسفل */
+        }
+
+        /* رأس الصفحة (Header) - بسيط ومركّز */
+        header {
+            width: 100%;
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-dark), transparent);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* معرض الصور (Grid Gallery) - متجاوب وجميل */
+        .gallery-grid {
+            width: 90%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 280px هو الحجم الأدنى */
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .gallery-item {
+            background-color: rgba(15, 15, 18, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), inset 0 0 0 1px var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            transform: scale(0.98); /* تأثير parallax خفيف */
+            opacity: 0;
+            animation: fadeInScale 0.6s ease forwards;
+        }
+        /* لتأخير ظهور العناصر قليلاً */
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+        .gallery-item:nth-child(7) { animation-delay: 0.7s; }
+        .gallery-item:nth-child(8) { animation-delay: 0.8s; }
+
+
+        @keyframes fadeInScale {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 25px var(--primary-glow), inset 0 0 0 1px var(--primary-glow);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px; /* ارتفاع ثابت للصور */
+            object-fit: cover; /* لضمان تغطية الصورة للحاوية */
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05); /* تكبير الصورة داخل الحاوية عند التحويم */
+        }
+
+        .item-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .item-info h3 {
+            margin-bottom: 5px;
+            color: var(--text-light);
+            font-size: 1.3rem;
+        }
+
+        .item-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* نافذة العرض الكاملة (Lightbox) - حديثة ومرنة */
+        .lightbox {
+            display: none; /* مخفية في البداية */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--overlay-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            background: rgba(20, 20, 25, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--secondary-glow);
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: lightboxIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes lightboxIn {
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 70vh; /* لتوفير مساحة للنص */
+            object-fit: contain;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .lightbox-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--primary-glow);
+            text-shadow: 0 0 8px rgba(230, 57, 70, 0.3);
+        }
+
+        .lightbox-info p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        /* زر الإغلاق */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.3s;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: var(--primary-glow);
+            transform: rotate(90deg);
+        }
+
+        /* شريط التمرير المخصص */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-glow); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-glow); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>معرض الحكمة الخالدة</h1>
+        <p>استكشف وجوه الفلاسفة الذين شكلوا مسار الفكر البشري.</p>
+    </header>
+
+    <div class="gallery-grid" id="gallery">
+        </div>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="close-btn" onclick="closeLightbox()">&times;</span>
+            <img src="" alt="" class="lightbox-img" id="lightbox-img">
+            <div class="lightbox-info">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const philosophers = [
+            {
+                name: "أفلاطون",
+                period: "428/427 - 348/347 ق.م",
+                image: "50.jpg", // استبدل بمسار صورتك
+                description: "تلميذ سقراط ومؤسس الأكاديمية في أثينا. اشتهر بنظرية المُثُل (Forms) وفلسفته السياسية في كتاب الجمهورية."
+            },
+            {
+                name: "أرسطو",
+                period: "384 - 322 ق.م",
+                image: "12.jpeg", // استبدل بمسار صورتك
+                description: "تلميذ أفلاطون ومعلم الإسكندر الأكبر. يعتبر من أعظم المفكرين في التاريخ، له إسهامات في المنطق، الميتافيزيقا، الأخلاق، السياسة، والعلوم الطبيعية."
+            },
+            {
+                name: "سقراط",
+                period: "470 - 399 ق.م",
+                image: "60.jpeg", // استبدل بمسار صورتك
+                description: "فيلسوف يوناني كلاسيكي، يُعد أحد مؤسسي الفلسفة الغربية. اشتهر بمنهجه السقراطي في السؤال والجدل."
+            },
+            {
+                name: "فيثاغورس",
+                period: "570 - 495 ق.م",
+                image: "70.jpeg", // استبدل بمسار صورتك
+                description: "عالم رياضيات وفيلسوف يوناني، يُعرف بـ'نظرية فيثاغورس' ويعتبر أبو الأرقام."
+            },
+            {
+                name: "زينون الرواقي",
+                period: "334 - 262 ق.م",
+                image: "100.png", // استبدل بمسار صورتك
+                description: "فيلسوف يوناني من كيتيون، مؤسس المدرسة الرواقية التي تركز على الفضيلة والحكمة."
+            },
+            {
+                name: "إبيقور",
+                period: "341 - 270 ق.م",
+                image: "333.png", // استبدل بمسار صورتك
+                description: "فيلسوف يوناني، مؤسس المذهب الإبيقوري الذي يرى أن اللذة الهادئة هي الخير الأسمى."
+            },
+            {
+                name: "هيراكليتس",
+                period: "535 - 475 ق.م",
+                image: "80.jpg", // استبدل بمسار صورتك
+                description: "فيلسوف يوناني ما قبل سقراط، اشتهر بمفهوم 'كل شيء يتغير' وأن النار هي العنصر الأساسي."
+            },
+            {
+                name: "بارمينيدس",
+                period: "515 - 450 ق.م",
+                image: "200.jpeg", // استبدل بمسار صورتك
+                description: "فيلسوف يوناني ما قبل سقراط، يُعرف بفلسفته عن 'الوجود' ووحدته وثباته، على عكس هيراكليتس."
+            }
+        ];
+
+        const gallery = document.getElementById('gallery');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxDesc = document.getElementById('lightbox-desc');
+
+        // دالة لإنشاء عناصر المعرض
+        function createGalleryItem(philosopher) {
+            const item = document.createElement('div');
+            item.classList.add('gallery-item');
+            item.setAttribute('data-name', philosopher.name);
+            item.setAttribute('data-period', philosopher.period);
+            item.setAttribute('data-description', philosopher.description);
+
+            item.innerHTML = `
+                <img src="${philosopher.image}" alt="${philosopher.name}">
+                <div class="item-info">
+                    <h3>${philosopher.name}</h3>
+                    <p>${philosopher.period}</p>
+                </div>
+            `;
+            item.addEventListener('click', () => openLightbox(philosopher));
+            gallery.appendChild(item);
+        }
+
+        // إضافة جميع الفلاسفة إلى المعرض
+        philosophers.forEach(createGalleryItem);
+
+        // فتح نافذة العرض الكاملة (Lightbox)
+        function openLightbox(philosopher) {
+            lightboxImg.src = philosopher.image;
+            lightboxImg.alt = philosopher.name;
+            lightboxTitle.textContent = philosopher.name;
+            lightboxDesc.textContent = philosopher.description;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // منع التمرير في الخلفية
+        }
+
+        // إغلاق نافذة العرض الكاملة (Lightbox)
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; // إعادة التمرير في الخلفية
+        }
+
+        // إغلاق النافذة بالضغط على زر Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+
+        // إغلاق النافذة بالضغط خارج المحتوى
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    </script>
+
+</body>
+</html>
