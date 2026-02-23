@@ -45,20 +45,52 @@ ul { list-style: none; }
 
 /* Navbar المشتركة */
 .navbar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 5%; background-color: rgba(0,0,0,0.95);
-    border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%; /* أقصر */
+    background-color: rgba(10, 10, 15, 0.75); /* خلفية زجاجية مستقبلية */
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(0, 255, 65, 0.2); /* حد سفلي نيون خافت */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+.navbar:hover {
+    background-color: rgba(10, 10, 15, 0.9);
 }
 .logo { display: flex; align-items: center; gap: 10px; }
-.logo i { border: 1px solid var(--neon-red); padding: 8px; border-radius: 50%; color: var(--text-white); animation: heartBeat 2.5s infinite ease-in-out; }
-.logo-text span { font-weight: 900; display: block; line-height: 1; }
-.logo-text small { color: var(--neon-green); font-size: 0.7rem; letter-spacing: 1px; }
+.logo i { border: 1px solid rgba(255, 0, 0, 0.6); padding: 8px; border-radius: 50%; color: var(--text-white); animation: heartBeat 2.5s infinite ease-in-out; box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); transition: 0.3s; }
+.logo:hover i {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--neon-red);
+}
+.logo-text span { font-weight: 900; display: block; line-height: 1; font-family: 'Reem Kufi', sans-serif; }
+.logo-text small { color: var(--neon-green); font-size: 0.7rem; letter-spacing: 1px; text-shadow: 0 0 5px var(--neon-green); }
 
-.nav-links { display: flex; gap: 25px; }
-.nav-links a { font-weight: bold; color: var(--text-gray); position: relative; }
+.nav-links { display: flex; gap: 30px; }
+.nav-links a { font-weight: bold; color: var(--text-gray); position: relative; padding: 5px 0; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
 /* التمييز للصفحة الحالية */
-.nav-links a.active { color: var(--neon-green); }
+.nav-links a.active { color: var(--text-white); text-shadow: 0 0 5px var(--neon-green); }
 .nav-links a:hover { color: var(--text-white); }
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--neon-green);
+    transition: width 0.3s ease-out;
+    box-shadow: 0 0 8px var(--neon-green);
+}
+.nav-links a:hover::after, .nav-links a.active::after {
+    width: 50%;
+}
 
 /* زر القائمة للموبايل (مخفي في الشاشات الكبيرة) */
 .menu-btn { display: none; font-size: 1.8rem; color: var(--neon-gold); cursor: pointer; transition: 0.3s; }
@@ -287,6 +319,13 @@ footer {
     color: var(--neon-red);
 }
 
+/* لإخفاء رابط الكتب النادرة من القائمة العلوية في نسخة سطح المكتب */
+@media (min-width: 769px) {
+    .nav-special-mobile {
+        display: none;
+    }
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
@@ -327,7 +366,7 @@ footer {
     
     .nav-links {
         position: fixed;
-        top: 85px; /* أسفل الهيدر */
+        top: 70px; /* أسفل الهيدر (تم تقليل الارتفاع) */
         left: 20px; /* محاذاة لليسار */
         right: auto;
         width: auto;
@@ -341,8 +380,8 @@ footer {
         gap: 15px;
         padding: 25px;
         border-radius: 15px;
-        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid var(--neon-gold);
+        transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid var(--neon-green);
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         z-index: 1000;
         opacity: 0;
@@ -365,8 +404,8 @@ footer {
     }
 
     .nav-links a:hover, .nav-links a.active {
-        color: var(--neon-gold);
-        text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-green);
+        color: var(--neon-green);
+        text-shadow: 0 0 15px var(--neon-green);
         border-bottom: none;
     }
 
